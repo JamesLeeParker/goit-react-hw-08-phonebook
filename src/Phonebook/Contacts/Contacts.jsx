@@ -20,7 +20,6 @@ export default function Contacts() {
   const getFilteredContact = () => {
     const normalizeFilter = filter.toLowerCase();
     return contacts.filter((contact) => {
-      console.log("✈️ ~ contact", contact);
       return contact.name.toLowerCase().includes(normalizeFilter);
     });
   };

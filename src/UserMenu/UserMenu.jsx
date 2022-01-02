@@ -1,19 +1,18 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getUser, getCurrentUser } from "../redux/Operations";
+import { logOut } from "../redux/Operations";
 
-const UserMenu = ({ name }) => {
+const UserMenu = () => {
   const dispatch = useDispatch();
-  // const user = useSelector();
+  const userName = useSelector((state) => state.currUser.user.name);
 
-  useEffect(() => {
-    getUser()(dispatch);
-  }, []);
+  const getLogOut = () => {
+    dispatch(logOut());
+  };
 
   return (
     <>
-      <p>Wellcome {name}</p>
-      <button>Logout</button>
+      <p>Wellcome {userName}</p>
+      <button onClick={getLogOut}>Logout</button>
     </>
   );
 };

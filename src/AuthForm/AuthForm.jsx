@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { register, createUser } from "../redux/Operations";
+// import { register } from "../redux/ath-reducer";
 
 const AuthForm = () => {
   const [name, setName] = useState("");
@@ -21,7 +22,6 @@ const AuthForm = () => {
   const fechNewUser = (e) => {
     e.preventDefault();
     dispatch(register({ name, email, password }));
-    // dispatch(createUser({ name, email, password }));
     setName("");
     setEmail("");
     setPassword("");

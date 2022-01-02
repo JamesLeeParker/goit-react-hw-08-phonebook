@@ -9,13 +9,12 @@ const onFilter = createAction("contacts/filter_change");
 
 const API_ENDPOINT = "contacts";
 
-const getContacts = () => (dispatch) => {
-  api.getData().then((contacts) => dispatch(setContacts(contacts)));
+const getContacts = (token) => (dispatch) => {
+  api.getData(token).then((contacts) => dispatch(setContacts(contacts)));
 };
 
-const addItem = (contact) => (dispatch) => {
-  console.log(contact);
-  api.saveItem(contact);
+const addItem = (contact, token) => (dispatch) => {
+  api.saveItem(contact, token);
   dispatch(addContact(contact));
 };
 

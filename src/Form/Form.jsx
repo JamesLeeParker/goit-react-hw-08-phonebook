@@ -10,14 +10,14 @@ const STORAGE_KEY = "contacts";
 
 export default function Form() {
   const [name, setContact] = useState("");
-  const [phone, setPhone] = useState("");
-  const contact = { id: nanoid(), name, phone };
+  const [number, setNumber] = useState("");
+  const contact = { id: nanoid(), name, number };
   const dispatch = useDispatch();
-  const contacts = useSelector((state) => state.contacts.items);
-  // const contacts = useSelector((state) => state.items);
+  const token = useSelector((state) => state.currUser.token);
+  const contacts = useSelector((state) => state.items);
 
   useEffect(() => {
-    getContacts()(dispatch);
+    getContacts(token)(dispatch);
   }, []);
   // useEffect(() => {
   //   const savedContacts = storage.get(STORAGE_KEY);
@@ -31,17 +31,17 @@ export default function Form() {
   }, [contact]);
 
   const handleInputName = (e) => setContact(e.target.value);
-  const handleInputNumber = (e) => setPhone(e.target.value);
+  const handleInputNumber = (e) => setNumber(e.target.value);
   const handleAddContact = (e) => {
     e.preventDefault();
     if (
-      contacts.find(
+      contacts?.find(
         (item) => item.name.toLowerCase() === contact.name.toLowerCase()
       )
     )
       return alert("NO!");
 
-    addItem(contact)(dispatch);
+    addItem(contact, token)(dispatch);
     // dispatch(addContact(contact));
   };
 
@@ -66,7 +66,7 @@ export default function Form() {
           onChange={handleInputNumber}
           type="tel"
           name="number"
-          value={phone}
+          value={number}
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
