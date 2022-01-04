@@ -1,16 +1,23 @@
 import { nanoid } from "nanoid";
 import { useState, useEffect, Suspense } from "react";
 import { Switch, Route } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Phonebook from "../Phonebook/Phonebook";
 import Header from "../Header/Header";
 import LoginForm from "../LoginForm/LoginForm";
 import AuthForm from "../AuthForm/AuthForm";
+import { fetchCurrentUser } from "../redux/Operations";
 
 const STORAGE_KEY = "contacts";
 
 const App = () => {
+  const dispatch = useDispatch();
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchCurrentUser());
+  }, [dispatch]);
 
   const handleFilterChange = (value) => {
     setFilter(value);

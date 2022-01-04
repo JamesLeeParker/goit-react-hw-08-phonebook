@@ -11,10 +11,10 @@ const createUser = createAction("users/user_create");
 
 const token = {
   set(token) {
-    axios.defaults.headers.common.Autorization = `Bearer ${token}`;
+    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
   },
   unset() {
-    axios.defaults.headers.common.Autorization = "";
+    axios.defaults.headers.common.Authorization = "";
   },
 };
 
@@ -48,6 +48,23 @@ const logOut = createAsyncThunk("user/logout", async () => {
   } catch (error) {}
 });
 
+const fetchCurrentUser = createAsyncThunk(
+  "auth/refresh",
+  async (_, thunkAPI) => {
+    const state = thunkAPI.getState();
+    const persistedToken = state.auth.token;
+    if (persistedToken === null)
+      // return state;
+      thunkAPI.rejectWithValue();
+
+    token.set(persistedToken);
+    try {
+      const { data } = await axios.get("/users/current");
+      return data;
+    } catch (error) {}
+  }
+);
+
 // const getCurrentUser = createAsyncThunk("user/user_set", async (credential) => {
 //   try {
 //     const { data } = await axios.get("/users/current", credential);
@@ -61,4 +78,4 @@ const logOut = createAsyncThunk("user/logout", async () => {
 //   getFetchAuthApi().then((user) => dispatch(createUser(user)));
 // };
 
-export { register, createUser, login, logOut };
+export { register, createUser, login, logOut, fetchCurrentUser };

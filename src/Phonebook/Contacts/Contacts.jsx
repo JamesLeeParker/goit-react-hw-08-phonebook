@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { Route } from "react-router-dom";
 
 import { onDeleteContact } from "../../redux/contactsActions";
 
@@ -24,10 +25,10 @@ export default function Contacts() {
     });
   };
 
-  return getFilteredContact().map(({ id, name, phone }) => {
+  return getFilteredContact().map(({ id, name, number }) => {
     return (
       <li id={id} key={id}>
-        <span>{name}</span>: <span>{phone}</span>
+        <span>{name}</span>: <span>{number}</span>
         <button type="button" onClick={btnDelete}>
           delete
         </button>

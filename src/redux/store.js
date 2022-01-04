@@ -2,6 +2,17 @@
 // import { devToolsEnhancer } from "redux-devtools-extension";
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from "redux-persist";
+import storage from "redux-persist/lib/storage";
 // import { itemsReducer, filterReducer } from "./contactsReducer";
 import { contactsReducer } from "./contactsReducer";
 import authSlice from "./ath-reducer";
@@ -13,8 +24,15 @@ const logger = createLogger({
   collapsed: (getState, action, logEntry) => !logEntry.error,
 });
 
+const authPersistConfig = {
+  key: "auth",
+  storage,
+  whitelist: ["token"],
+};
+
 const store = configureStore({
   reducer: {
+    auth: persistReducer(authPersistConfig, authSlice),
     contacts: contactsReducer,
     currUser: authSlice,
   },
@@ -25,4 +43,6 @@ const store = configureStore({
 
 // const store = createStore(rootReducer, devToolsEnhancer());
 
-export default store;
+const persistor = persistStore(store);
+
+export { store, persistor };
