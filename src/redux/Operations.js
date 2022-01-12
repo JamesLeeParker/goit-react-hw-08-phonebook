@@ -1,10 +1,5 @@
-import {
-  createReducer,
-  createAction,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createAction, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { onRegisterUser, getFetchAuthApi } from "../services/auth-api";
 
 axios.defaults.baseURL = "https://connections-api.herokuapp.com";
 const createUser = createAction("users/user_create");
@@ -17,10 +12,6 @@ const token = {
     axios.defaults.headers.common.Authorization = "";
   },
 };
-
-const userReducer = createReducer({}, (builder) => {
-  builder.addCase(createUser, (_, action) => action.payload);
-});
 
 const register = createAsyncThunk(
   "user/user_registration",
@@ -53,9 +44,8 @@ const fetchCurrentUser = createAsyncThunk(
   async (_, thunkAPI) => {
     const state = thunkAPI.getState();
     const persistedToken = state.auth.token;
-    if (persistedToken === null)
-      // return state;
-      thunkAPI.rejectWithValue();
+    if (persistedToken === null) return thunkAPI.rejectWithValue();
+    // return state;
 
     token.set(persistedToken);
     try {
@@ -64,18 +54,5 @@ const fetchCurrentUser = createAsyncThunk(
     } catch (error) {}
   }
 );
-
-// const getCurrentUser = createAsyncThunk("user/user_set", async (credential) => {
-//   try {
-//     const { data } = await axios.get("/users/current", credential);
-//     return data;
-//   } catch (error) {}
-// });
-
-// // const registrateUser = (user) => (dispatch) => {};
-
-// const getUser = () => (dispatch) => {
-//   getFetchAuthApi().then((user) => dispatch(createUser(user)));
-// };
 
 export { register, createUser, login, logOut, fetchCurrentUser };

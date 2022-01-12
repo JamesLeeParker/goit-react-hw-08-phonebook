@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { register, createUser } from "../redux/Operations";
+import { register } from "../redux/Operations";
 // import { register } from "../redux/ath-reducer";
 
 const AuthForm = () => {

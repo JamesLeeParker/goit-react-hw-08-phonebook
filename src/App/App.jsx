@@ -1,17 +1,18 @@
-import { nanoid } from "nanoid";
-import { useState, useEffect, Suspense } from "react";
-import { Switch, Route } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { Switch } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Phonebook from "../Phonebook/Phonebook";
 import Header from "../Header/Header";
 import LoginForm from "../LoginForm/LoginForm";
 import AuthForm from "../AuthForm/AuthForm";
 import { fetchCurrentUser } from "../redux/Operations";
-
-const STORAGE_KEY = "contacts";
+import PrivateRoute from "../PrivateRoute/PrivateRoute";
+import PublicRoute from "../PublicRoute/PublicRoute";
+import s from "./App.module.scss";
 
 const App = () => {
   const dispatch = useDispatch();
+  const isUserLoadding = useSelector((state) => state.auth.isUserLoadding);
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState("");
 
@@ -29,24 +30,35 @@ const App = () => {
       return contact.name.toLowerCase().includes(normalizeFilter);
     });
   };
-
+  if (isUserLoadding) return <>Loader...</>;
   return (
-    <div>
+    <div className={s.container}>
       <Header />
-      {/* <Suspense fallback={<div>Loadding...</div>}> */}
       <Switch>
-        <Route path={"/contacts"}>
+        <PrivateRoute path={"/contacts"}>
           <Phonebook
             contacts={getFilteredContact()}
             onFilterChange={handleFilterChange}
           />
-        </Route>
-        <Route path={"/login"}>
+        </PrivateRoute>
+        {/* <Route path={"/contacts"}>
+          <Phonebook
+            contacts={getFilteredContact()}
+            onFilterChange={handleFilterChange}
+          />
+        </Route> */}
+        <PublicRoute path={"/login"} resricted>
           <LoginForm />
-        </Route>
-        <Route path={"/registration"}>
+        </PublicRoute>
+        <PublicRoute path={"/registration"} resricted>
           <AuthForm />
-        </Route>
+        </PublicRoute>
+        {/* <Route path={"/login"}>
+          <LoginForm />
+        </Route> */}
+        {/* <Route path={"/registration"}>
+          <AuthForm />
+        </Route> */}
       </Switch>
       {/* </Suspense> */}
     </div>

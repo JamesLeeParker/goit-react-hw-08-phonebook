@@ -24,7 +24,7 @@ const LoginForm = () => {
       <form onSubmit={gerAccessCredentials}>
         <label>
           <span>Mail:</span>
-          <input type="text" value={email} onChange={getEmail} />
+          <input type="email" value={email} onChange={getEmail} />
         </label>
         <label>
           <span>Password:</span>

@@ -1,34 +1,19 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { nanoid } from "nanoid";
-import { addContact, setContacts } from "../redux/contactsActions";
 import { getContacts, addItem } from "../redux/contactsActions";
-import * as storage from "../services/localStorage";
 import s from "./Forem.module.scss";
-
-const STORAGE_KEY = "contacts";
 
 export default function Form() {
   const [name, setContact] = useState("");
   const [number, setNumber] = useState("");
   const contact = { id: nanoid(), name, number };
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.currUser.token);
   const contacts = useSelector((state) => state.items);
 
   useEffect(() => {
-    getContacts(token)(dispatch);
+    dispatch(getContacts());
   }, []);
-  // useEffect(() => {
-  //   const savedContacts = storage.get(STORAGE_KEY);
-  //   if (savedContacts) {
-  //     dispatch(setContacts(savedContacts));
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    storage.save(STORAGE_KEY, contacts);
-  }, [contact]);
 
   const handleInputName = (e) => setContact(e.target.value);
   const handleInputNumber = (e) => setNumber(e.target.value);
@@ -41,8 +26,7 @@ export default function Form() {
     )
       return alert("NO!");
 
-    addItem(contact, token)(dispatch);
-    // dispatch(addContact(contact));
+    dispatch(addItem(contact));
   };
 
   return (

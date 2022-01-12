@@ -1,6 +1,6 @@
 // import { createStore, combineReducers } from "redux";
 // import { devToolsEnhancer } from "redux-devtools-extension";
-import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import { createLogger } from "redux-logger";
 import {
   persistStore,
@@ -34,9 +34,14 @@ const store = configureStore({
   reducer: {
     auth: persistReducer(authPersistConfig, authSlice),
     contacts: contactsReducer,
-    currUser: authSlice,
+    // currUser: authSlice,
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(logger),
 
   devTools: process.env.NODE_ENV !== "production",
 });
