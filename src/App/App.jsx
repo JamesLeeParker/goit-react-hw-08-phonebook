@@ -41,26 +41,13 @@ const App = () => {
             onFilterChange={handleFilterChange}
           />
         </PrivateRoute>
-        {/* <Route path={"/contacts"}>
-          <Phonebook
-            contacts={getFilteredContact()}
-            onFilterChange={handleFilterChange}
-          />
-        </Route> */}
         <PublicRoute path={"/login"} resricted>
           <LoginForm />
         </PublicRoute>
         <PublicRoute path={"/registration"} resricted>
           <AuthForm />
         </PublicRoute>
-        {/* <Route path={"/login"}>
-          <LoginForm />
-        </Route> */}
-        {/* <Route path={"/registration"}>
-          <AuthForm />
-        </Route> */}
       </Switch>
-      {/* </Suspense> */}
     </div>
   );
 };
